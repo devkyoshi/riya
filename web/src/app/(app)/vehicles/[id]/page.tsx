@@ -6,13 +6,19 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowLeft, Camera, Car, FileText, Wrench, QrCode,
-  Gauge, Fuel, Settings2, Calendar,
+  Gauge, Fuel, Settings2, Calendar, Share2, Activity,
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { PageSpinner } from "@/components/ui/Spinner";
 import { TimelineFeed } from "@/components/timeline/TimelineFeed";
+import { ShareLinksPanel } from "@/components/sharing/ShareLinksPanel";
+import { CoOwnersPanel } from "@/components/sharing/CoOwnersPanel";
+import { HealthScoreCard } from "@/components/insights/HealthScoreCard";
+import { ValuationCard } from "@/components/insights/ValuationCard";
+import { MaintenanceSchedule } from "@/components/insights/MaintenanceSchedule";
+import { MileageLogPanel } from "@/components/insights/MileageLogPanel";
 import { vehiclesApi } from "@/lib/api/vehicles";
 import { recordsApi } from "@/lib/api/records";
 import { formatMileage } from "@/lib/utils";
@@ -28,7 +34,7 @@ export default function VehicleDetailPage() {
   const router = useRouter();
   const qc = useQueryClient();
   const coverInput = useRef<HTMLInputElement>(null);
-  const [tab, setTab] = useState<"timeline" | "documents" | "records">("timeline");
+  const [tab, setTab] = useState<"timeline" | "documents" | "records" | "insights" | "sharing">("timeline");
 
   const { data: vehicle, isLoading } = useQuery({
     queryKey: ["vehicle", id],
@@ -137,8 +143,8 @@ export default function VehicleDetailPage() {
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 dark:bg-zinc-800 rounded-full p-1 w-fit mb-6">
-        {(["timeline", "documents", "records"] as const).map((t) => (
+      <div className="flex gap-1 bg-gray-100 dark:bg-zinc-800 rounded-full p-1 w-fit mb-6 flex-wrap">
+        {(["timeline", "documents", "records", "insights", "sharing"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -162,6 +168,28 @@ export default function VehicleDetailPage() {
       {tab === "records" && (
         <div className="text-center py-8">
           <Link href={`/vehicles/${id}/records`}><Button>View Records</Button></Link>
+        </div>
+      )}
+      {tab === "insights" && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <HealthScoreCard vehicleId={id} />
+            <ValuationCard vehicleId={id} />
+          </div>
+          <MaintenanceSchedule vehicleId={id} />
+          <div className="bg-white dark:bg-zinc-800 rounded-3xl border border-gray-100 dark:border-zinc-700 p-5">
+            <MileageLogPanel vehicleId={id} />
+          </div>
+        </div>
+      )}
+      {tab === "sharing" && (
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-zinc-800 rounded-3xl border border-gray-100 dark:border-zinc-700 p-5">
+            <ShareLinksPanel vehicleId={id} />
+          </div>
+          <div className="bg-white dark:bg-zinc-800 rounded-3xl border border-gray-100 dark:border-zinc-700 p-5">
+            <CoOwnersPanel vehicleId={id} />
+          </div>
         </div>
       )}
     </div>

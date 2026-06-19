@@ -20,6 +20,10 @@ import documentsRoutes from '@/modules/documents/documents.routes.js'
 import recordsRoutes from '@/modules/records/records.routes.js'
 import timelineRoutes from '@/modules/timeline/timeline.routes.js'
 import adminRoutes from '@/modules/admin/admin.routes.js'
+import sharingRoutes from '@/modules/sharing/sharing.routes.js'
+import transfersRoutes from '@/modules/transfers/transfers.routes.js'
+import insightsRoutes from '@/modules/insights/insights.routes.js'
+import partnersRoutes from '@/modules/partners/partners.routes.js'
 
 export interface BuildAppOptions {
   testing?: boolean
@@ -86,6 +90,10 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
   await app.register(recordsRoutes,   { prefix: '/v1' })
   await app.register(timelineRoutes,  { prefix: '/v1' })
   await app.register(adminRoutes,     { prefix: '/v1/admin' })
+  await app.register(sharingRoutes,   { prefix: '/v1' })
+  await app.register(transfersRoutes, { prefix: '/v1' })
+  await app.register(insightsRoutes,  { prefix: '/v1' })
+  await app.register(partnersRoutes,  { prefix: '/v1' })
 
   return app
 }

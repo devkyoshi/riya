@@ -15,6 +15,13 @@
       "when": 1781703018075,
       "tag": "0001_long_red_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1781838245576,
+      "tag": "0002_curly_thanos",
+      "breakpoints": true
     }
   ]
 }

@@ -13,6 +13,11 @@ export type FeatureKey =
   | 'qr_sharing'
   | 'notifications'
   | 'admin_panel'
+  | 'share_links'
+  | 'co_owners'
+  | 'ownership_transfer'
+  | 'vehicle_insights'
+  | 'partner_portal'
 
 export const roles = pgTable('roles', {
   roleKey:     varchar('role_key', { length: 50 }).primaryKey(),

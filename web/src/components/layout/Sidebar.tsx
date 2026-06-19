@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import {
-  Car, LayoutDashboard, LogOut, Sun, Moon, Shield,
+  Car, LayoutDashboard, LogOut, Sun, Moon, Shield, Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth/AuthContext";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/vehicles",  label: "My Vehicles", icon: Car },
+  { href: "/partner",   label: "Partner Portal", icon: Building2 },
 ];
 
 const adminItems = [
