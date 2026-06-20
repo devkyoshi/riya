@@ -52,6 +52,16 @@ const documentsRoutes: FastifyPluginAsync = async (fastify) => {
     preHandler,
     handler: handlers.deleteDocument,
   })
+
+  fastify.patch('/vehicles/:id/documents/:docId/confirm-ocr', {
+    schema: {
+      tags: ['Documents'],
+      summary: 'Confirm auto-extracted OCR fields (marks document as verified)',
+      params: Type.Object({ id: Type.String(), docId: Type.String() }),
+    },
+    preHandler,
+    handler: handlers.confirmOcrFields,
+  })
 }
 
 export default documentsRoutes

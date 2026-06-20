@@ -21,4 +21,7 @@ export const documentsApi = {
 
   delete: (vehicleId: string, docId: string) =>
     apiClient.delete(`/vehicles/${vehicleId}/documents/${docId}`),
+
+  confirmOcrFields: (vehicleId: string, docId: string) =>
+    apiClient.patch<Document>(`/vehicles/${vehicleId}/documents/${docId}/confirm-ocr`).then((r) => r.data),
 };

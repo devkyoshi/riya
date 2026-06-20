@@ -56,3 +56,11 @@ export async function deleteDocument(
   await service.deleteDocument(req.server.db, getStorage(), req.params.id, req.params.docId, req.user.sub)
   return reply.code(204).send()
 }
+
+export async function confirmOcrFields(
+  req: FastifyRequest<{ Params: { id: string; docId: string } }>,
+  reply: FastifyReply,
+) {
+  const doc = await service.confirmOcrFields(req.server.db, req.params.id, req.params.docId, req.user.sub)
+  return reply.send(doc)
+}

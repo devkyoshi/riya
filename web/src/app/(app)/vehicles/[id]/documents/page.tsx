@@ -62,6 +62,7 @@ export default function DocumentsPage() {
               <DocumentCard
                 key={doc.id}
                 document={doc}
+                vehicleId={id}
                 onDelete={(docId) => deleteMutation.mutate(docId)}
               />
             ))}

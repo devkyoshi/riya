@@ -69,6 +69,20 @@ services:
     profiles:
       - dev
 
+  ocr:
+    build: ./ocr
+    container_name: riya_ocr
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      BACKEND_URL: http://host.docker.internal:3001
+      INTERNAL_SECRET: dev-internal-secret
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles:
+      - ocr
+
 volumes:
   postgres_data:
   postgres_test_data:

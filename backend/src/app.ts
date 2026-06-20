@@ -24,6 +24,7 @@ import sharingRoutes from '@/modules/sharing/sharing.routes.js'
 import transfersRoutes from '@/modules/transfers/transfers.routes.js'
 import insightsRoutes from '@/modules/insights/insights.routes.js'
 import partnersRoutes from '@/modules/partners/partners.routes.js'
+import documentsInternalRoutes from '@/modules/documents/documents.internal.routes.js'
 
 export interface BuildAppOptions {
   testing?: boolean
@@ -93,7 +94,8 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
   await app.register(sharingRoutes,   { prefix: '/v1' })
   await app.register(transfersRoutes, { prefix: '/v1' })
   await app.register(insightsRoutes,  { prefix: '/v1' })
-  await app.register(partnersRoutes,  { prefix: '/v1' })
+  await app.register(partnersRoutes,           { prefix: '/v1' })
+  await app.register(documentsInternalRoutes,  { prefix: '/v1' })
 
   return app
 }

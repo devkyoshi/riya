@@ -30,6 +30,9 @@ const envSchema = z.object({
 
   SEED_ADMIN_EMAIL: z.string().email().optional(),
   SEED_ADMIN_PASSWORD: z.string().min(8).optional(),
+
+  OCR_SERVICE_URL: z.string().url().default('http://localhost:3002'),
+  OCR_INTERNAL_SECRET: z.string().default('dev-internal-secret'),
 })
 
 const parsed = envSchema.safeParse(process.env)

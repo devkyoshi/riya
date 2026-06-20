@@ -4,6 +4,7 @@ import { documents, timelinePosts, vehicles } from '@/db/schema/index.js'
 import { AppError } from '@/shared/errors.js'
 import type { MultipartFile } from '@fastify/multipart'
 import type { StorageAdapter } from '@/shared/storage.js'
+import { isOcrEligible, dispatchOcrJob } from './ocr.client.js'
 
 export async function assertVehicleOwner(db: Db, vehicleId: string, userId: string) {
   const vehicle = await db.query.vehicles.findFirst({
@@ -31,6 +32,8 @@ export async function uploadDocument(
 
   const { key, url, sizeBytes } = await storage.upload(file, `vehicles/${vehicleId}/documents`)
 
+  const eligible = isOcrEligible(meta.documentType)
+
   const [doc] = await db.insert(documents).values({
     vehicleId,
     uploadedBy: userId,
@@ -40,6 +43,7 @@ export async function uploadDocument(
     fileKey: key,
     fileSizeBytes: sizeBytes,
     mimeType: file.mimetype,
+    ocrStatus: eligible ? 'pending' : 'skipped',
     notes: meta.notes,
     expiresAt: meta.expiresAt ? new Date(meta.expiresAt) : undefined,
   }).returning()
@@ -53,6 +57,10 @@ export async function uploadDocument(
     refId: doc.id,
     refTable: 'documents',
   })
+
+  if (eligible) {
+    dispatchOcrJob({ id: doc.id, documentType: doc.documentType, fileUrl: doc.fileUrl })
+  }
 
   return doc
 }
@@ -83,4 +91,13 @@ export async function deleteDocument(db: Db, storage: StorageAdapter, vehicleId:
   const doc = await getDocument(db, vehicleId, docId, userId)
   await storage.delete(doc.fileKey)
   await db.delete(documents).where(eq(documents.id, docId))
+}
+
+export async function confirmOcrFields(db: Db, vehicleId: string, docId: string, userId: string) {
+  const doc = await getDocument(db, vehicleId, docId, userId)
+  const [updated] = await db.update(documents)
+    .set({ isVerified: true, verifiedBy: userId })
+    .where(eq(documents.id, docId))
+    .returning()
+  return updated
 }

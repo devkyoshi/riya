@@ -31,6 +31,13 @@ export interface Vehicle {
   createdAt: string;
 }
 
+export type OcrStatus = "pending" | "processing" | "completed" | "failed" | "skipped";
+
+export interface OcrField {
+  value: string | null;
+  confidence: number;
+}
+
 export interface Document {
   id: string;
   vehicleId: string;
@@ -39,6 +46,8 @@ export interface Document {
   fileUrl: string;
   fileMimeType: string;
   fileSizeBytes: number;
+  ocrStatus: OcrStatus;
+  extractedFields: Record<string, OcrField> | null;
   notes?: string;
   createdAt: string;
 }
